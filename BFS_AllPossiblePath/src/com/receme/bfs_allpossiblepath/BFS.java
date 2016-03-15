@@ -16,6 +16,7 @@ public class BFS {
 	private Node endNode;
 	private int minPathLength;
 	private Vector<Node> min_path;
+	public int sum = 0;
 
 	public BFS(Map<Integer, Vector<Node>> graph2, Node _startNode,
 			Node _endNode){
@@ -41,25 +42,20 @@ public class BFS {
 	private void bfs_Implementation(){
 		
 		temp_path.add(startNode);
-		//print startNode;
 		q.enQueue(temp_path);
 		
 		
 		while(!q.isEmpty()) {
 			tmp_path = q.deQueue();
-			//System.out.println(tmp_path.size());
 			
 			Node last_node = new Node();
 			last_node = q.getLastNode(tmp_path);
 						
 			if(last_node.val == endNode.val){
-				System.out.print("Valid path: "); 
-				printPath(tmp_path);
-				System.out.println(tmp_path.size());
+				sum ++;
 				int tmpPathLength = 0;
 				for(Node node : tmp_path){
 					tmpPathLength += node.weight;
-					System.out.print(node.val);
 				}
 				if(minPathLength == -1){
 					minPathLength = tmpPathLength;
@@ -69,7 +65,6 @@ public class BFS {
 					minPathLength = tmpPathLength;
 					min_path = tmp_path;
 				}
-				System.out.println(minPathLength);
 				continue;
 			}
 		
