@@ -40,6 +40,10 @@ public class Node {
         return val;
     }
 
+    public boolean equals(Node node){
+        return node.val == this.val;
+    }
+
     public boolean isEqual(Node node) {
         return node.val == this.val;
     }

@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-    //1466
-//	169410
     public static Map<Integer, Vector<Node>> graph = null;
     public Vector<Node> nodes = null;
     public static HashMap v;
