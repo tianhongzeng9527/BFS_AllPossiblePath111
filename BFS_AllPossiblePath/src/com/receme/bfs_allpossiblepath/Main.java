@@ -12,7 +12,6 @@ public class Main {
     public Vector<Node> nodes = null;
     public static HashMap v;
     static Vector<Integer> as;
-    public static Set<Integer> blackNodeList = new HashSet<>();
     int a = 5;
     public static List<Integer> list = null;
 
@@ -41,20 +40,18 @@ public class Main {
                 graph.put(Integer.valueOf(splits[1]), nodes);
             }
         }
-//        for (Map.Entry<Integer, Vector<Node>> map : graph.entrySet()) {
-//            System.out.print(map.getKey() + "  ");
-//            for (Node node : map.getValue()) {
-//                System.out.print(node.val + "  ");
-//            }
-//            System.out.println();
-//        }
         long time = System.currentTimeMillis();
         BFS bfsAlgo = new BFS(graph, new Node(2), new Node(19));
         bfsAlgo.getAvailablePath();
         bfsAlgo.getMinPath();
         System.out.println(System.currentTimeMillis() - time);
         System.out.println(bfsAlgo.sum);
-        DFS dfsAlgo = new DFS(graph, new Node(2), new Node(19), graph.size() / list.size());
+        DFS dfsAlgo2 = new DFS(graph, new Node(2), new Node(19), graph.size() / list.size());
+        dfsAlgo2.getAvailablePath();
+        dfsAlgo2.printMinPath();
+        System.out.println(System.currentTimeMillis() - time);
+        System.out.println(dfsAlgo2.sum);
+        DFSOptimization dfsAlgo = new DFSOptimization(graph, new Node(2), new Node(19), graph.size() / list.size());
         dfsAlgo.getAvailablePath();
         dfsAlgo.printMinPath();
         System.out.println(System.currentTimeMillis() - time);
