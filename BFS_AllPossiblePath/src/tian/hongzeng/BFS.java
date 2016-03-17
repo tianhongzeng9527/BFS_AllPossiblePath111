@@ -1,4 +1,4 @@
-package com.receme.bfs_allpossiblepath;
+package tian.hongzeng;
 
 
 import java.util.HashMap;
@@ -7,24 +7,23 @@ import java.util.Vector;
 
 public class BFS {
 
-    //private Queue<Integer> path_queue = new LinkedList<Integer>();
     private MyQueue q;
-    private Vector<Node> temp_path, tmp_path;
+    private Vector<Node> temp_path, tmpPath;
     private Map<Integer, Vector<Node>> graph;
     public Vector<Node> all_linkNodes;
     private Node startNode;
     private Node endNode;
     private int minPathLength;
-    private Vector<Node> min_path;
+    private Vector<Node> minPath;
     public int sum = 0;
 
     public BFS(Map<Integer, Vector<Node>> graph2, Node _startNode,
                Node _endNode) {
         minPathLength = -1;
-        min_path = new Vector<Node>();
+        minPath = new Vector<Node>();
         q = new MyQueue();
         temp_path = new Vector<Node>();
-        tmp_path = new Vector<Node>();
+        tmpPath = new Vector<Node>();
         graph = new HashMap<Integer, Vector<Node>>();
         all_linkNodes = new Vector<Node>();
         this.graph = graph2;
@@ -33,42 +32,40 @@ public class BFS {
     }
 
     public void getAvailablePath() {
-        bfs_Implementation();
+        bfsImplementation();
     }
 
 
-    private void bfs_Implementation() {
+    private void bfsImplementation() {
         temp_path.add(startNode);
         q.enQueue(temp_path);
         while (!q.isEmpty()) {
-            tmp_path = q.deQueue();
-            Node last_node = new Node();
-            last_node = q.getLastNode(tmp_path);
-            if (last_node.val == endNode.val) {
-                if (getPathNodeVal(tmp_path).containsAll(Main.list)) {
-//                    printPath(tmp_path);
+            tmpPath = q.deQueue();
+            Node last_node = q.getLastNode(tmpPath);
+            if (last_node.getVal() == endNode.getVal()) {
+                if (getPathNodeVal(tmpPath).containsAll(Main.list)) {
                     sum++;
                     int tmpPathLength = 0;
-                    for (Node node : tmp_path) {
-                        tmpPathLength += node.weight;
+                    for (Node node : tmpPath) {
+                        tmpPathLength += node.getWeight();
                     }
                     if (minPathLength == -1) {
                         minPathLength = tmpPathLength;
-                        min_path = tmp_path;
+                        minPath = tmpPath;
                     } else if (minPathLength > tmpPathLength) {
                         minPathLength = tmpPathLength;
-                        min_path = tmp_path;
+                        minPath = tmpPath;
                     }
                 }
                 continue;
             }
-            Vector<Node> all_linkNodes = graph.get(last_node.val);
-            for (int i = 0; i < all_linkNodes.size(); i++) {
-                Node linknode = all_linkNodes.get(i);
-                if (!isIn_tmp_path(linknode)) {
+            Vector<Node> allLinkNodes = graph.get(last_node.getVal());
+            for (int i = 0; i < allLinkNodes.size(); i++) {
+                Node linkNode = allLinkNodes.get(i);
+                if (!isIn_tmp_path(linkNode)) {
                     Vector<Node> newPath = new Vector<Node>();
-                    newPath.addAll(tmp_path);
-                    newPath.add(linknode);
+                    newPath.addAll(tmpPath);
+                    newPath.add(linkNode);
                     q.enQueue(newPath);
                 }
             }
@@ -78,16 +75,16 @@ public class BFS {
 
     private void printPath(Vector<Node> path) {
         for (int i = 0; i < path.size(); i++) {
-            System.out.print(path.elementAt(i).val + " ");
+            System.out.print(path.elementAt(i).getVal() + " ");
         }
         System.out.print("\n");
     }
 
 
     private boolean isIn_tmp_path(Node linkNode) {
-        for (int j = 0; j < tmp_path.size(); j++) {
-            Node n = tmp_path.get(j);
-            if (linkNode.val == n.val)
+        for (int j = 0; j < tmpPath.size(); j++) {
+            Node n = tmpPath.get(j);
+            if (linkNode.getVal() == n.getVal())
                 return true;
         }
         return false;
@@ -95,13 +92,13 @@ public class BFS {
 
     public void getMinPath() {
         System.out.println("------------------");
-        printPath(min_path);
+        printPath(minPath);
     }
 
     private Vector<Integer> getPathNodeVal(Vector<Node> path) {
         Vector<Integer> vector = new Vector<>();
         for (Node node : path) {
-            vector.add(node.val);
+            vector.add(node.getVal());
         }
         return vector;
     }

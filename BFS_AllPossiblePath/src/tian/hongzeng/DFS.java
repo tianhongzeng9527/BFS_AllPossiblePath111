@@ -1,10 +1,10 @@
-package com.receme.bfs_allpossiblepath;
+package tian.hongzeng;
 
 import java.util.Map;
 import java.util.Stack;
 import java.util.Vector;
 
-public class DFSOptimization {
+public class DFS {
     private Stack<Node> nodeStack;
     private Node startNode;
     private Node endNode;
@@ -12,12 +12,9 @@ public class DFSOptimization {
     private Stack<Node> min_path;
     private Map<Integer, Vector<Node>> graph;
     public int sum = 0;
-    private int depthLimit = 0;
-    private int curentDepth = 0;
 
-    public DFSOptimization(Map<Integer, Vector<Node>> graph, Node _startNode,
-                           Node _endNode, int depthLimit) {
-        this.depthLimit = depthLimit;
+    public DFS(Map<Integer, Vector<Node>> graph, Node _startNode,
+               Node _endNode) {
         this.graph = graph;
         minPathLength = -1;
         nodeStack = new Stack<>();
@@ -32,41 +29,37 @@ public class DFSOptimization {
 
     private Node getUnvisitedChildNode(Node parent) {
         Node result = null;
-        Vector<Node> vector = graph.get(parent.val);
+        Vector<Node> vector = graph.get(parent.getVal());
         int i = 0;
         for(Node node1: vector){
-            if((vistied[node1.val] != 1) && (!node1.isVisited)){
+            if((visited[node1.getVal()] != 1) && (!node1.getIsVisited())){
                 result = node1;
-                result.isVisited = true;
-                vistied[node1.val] = 1;
+                result.setVisited(true);
+                visited[node1.getVal()] = 1;
                 break;
             }
-//            if(i >= 2){
-//                break;
-//            }
             i++;
         }
         return result;
     }
-    private void setChildUnVistited(Node parent){
-        Vector<Node> vector = graph.get(parent.val);
+    private void setChildUnVisited(Node parent){
+        Vector<Node> vector = graph.get(parent.getVal());
         for(Node node1: vector){
-            node1.isVisited = false;
+            node1.setVisited(false);
+            node1.setVisited(false);
         }
     }
 
-    int[] vistied = new int[600];
+    int[] visited = new int[600];
     private void DFSImplementation() {
-        vistied[startNode.val] = 1;
+        visited[startNode.getVal()] = 1;
         nodeStack.add(startNode);
         while (!nodeStack.isEmpty()) {
             Node node = nodeStack.peek();
             Node childNode = getUnvisitedChildNode(node);
             if (childNode != null) {
                 nodeStack.add(childNode);
-                curentDepth++;
-                if(childNode.val == endNode.val){
-                    curentDepth = 0;
+                if(childNode.getVal() == endNode.getVal()){
                     if (getPathNodeVal(nodeStack).containsAll(Main.list)) {
                         sum++;
                         int tmpPathLength = getPathLength(nodeStack);
@@ -78,23 +71,13 @@ public class DFSOptimization {
                             stackToVector(min_path, nodeStack);
                         }
                     }
-                    vistied[nodeStack.peek().val] = 0;
-                    setChildUnVistited(nodeStack.peek());
+                    visited[nodeStack.peek().getVal()] = 0;
+                    setChildUnVisited(nodeStack.peek());
                     nodeStack.pop();
-                }
-                else{
-                    if(Main.list.contains(childNode.val)){
-                        curentDepth = 0;
-                    }
-                }
-                if(curentDepth > depthLimit){
-                    vistied[nodeStack.peek().val] = 0;
-                    nodeStack.pop();
-                    curentDepth--;
                 }
             } else {
-                vistied[nodeStack.peek().val] = 0;
-                setChildUnVistited(nodeStack.peek());
+                visited[nodeStack.peek().getVal()] = 0;
+                setChildUnVisited(nodeStack.peek());
                 nodeStack.pop();
             }
         }
@@ -102,14 +85,7 @@ public class DFSOptimization {
 
     public void printMinPath(){
         for(Node node : min_path){
-            System.out.print(node.val+" ");
-        }
-        System.out.println();
-    }
-
-    private void printLength(Stack<Node> path){
-        for(Node node : path){
-            System.out.print(node.val+"   ");
+            System.out.print(node.getVal()+" ");
         }
         System.out.println();
     }
@@ -117,7 +93,7 @@ public class DFSOptimization {
     private int getPathLength(Stack<Node> path) {
         int sum = 0;
         for (Node node : path) {
-            sum += node.weight;
+            sum += node.getWeight();
         }
         return sum;
     }
@@ -125,7 +101,7 @@ public class DFSOptimization {
     private Vector<Integer> getPathNodeVal(Stack<Node> path) {
         Vector<Integer> vector = new Vector<>();
         for (Node node : path) {
-            vector.add(node.val);
+            vector.add(node.getVal());
         }
         return vector;
     }

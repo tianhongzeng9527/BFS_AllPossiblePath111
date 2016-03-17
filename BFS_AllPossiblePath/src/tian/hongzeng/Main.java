@@ -1,4 +1,4 @@
-package com.receme.bfs_allpossiblepath;
+package tian.hongzeng;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,13 +6,9 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-    public static Map<Integer, Vector<Node>> graph = null;
-    public Vector<Node> nodes = null;
-    public static HashMap v;
-    static Vector<Integer> as;
-    int a = 5;
+    private static Map<Integer, Vector<Node>> graph = null;
     public static List<Integer> list = null;
-
+    public static final long time = System.currentTimeMillis();
     public static void main(String[] args) throws IOException {
         list = new ArrayList<>();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream("/demand.csv")));
@@ -43,32 +39,34 @@ public class Main {
         bfsAlgo.getAvailablePath();
         bfsAlgo.getMinPath();
         System.out.println(System.currentTimeMillis() - time);
+        time = System.currentTimeMillis();
         System.out.println(bfsAlgo.sum);
-        DFS dfsAlgo2 = new DFS(graph, new Node(2), new Node(19), graph.size() / list.size());
+        DFS dfsAlgo2 = new DFS(graph, new Node(2), new Node(19));
         dfsAlgo2.getAvailablePath();
         dfsAlgo2.printMinPath();
         System.out.println(System.currentTimeMillis() - time);
+        time = System.currentTimeMillis();
         System.out.println(dfsAlgo2.sum);
-        DFSOptimization dfsAlgo = new DFSOptimization(graph, new Node(2), new Node(19), graph.size() / list.size());
+        DFSOptimization dfsAlgo = new DFSOptimization(graph, new Node(2), new Node(19), 2);
         dfsAlgo.getAvailablePath();
         dfsAlgo.printMinPath();
         System.out.println(System.currentTimeMillis() - time);
         System.out.println(dfsAlgo.sum);
     }
 
-    public static int getSplitIndex(Vector<Node> vector) {
+    private static int getSplitIndex(Vector<Node> vector) {
         for (int i = 0; i < vector.size(); i++) {
-            if (!list.contains(vector.get(i).val)) {
+            if (!list.contains(vector.get(i).getVal())) {
                 return i;
             }
         }
         return vector.size();
     }
 
-    public static void insertToGraph(Vector<Node> vector, Node node) {
+    private static void handleSameNodeWithDifferentWeight(Vector<Node> vector, Node node) {
         for (Node node1 : vector) {
-            if (node1.val == node.val) {
-                if (node1.weight < node.weight) {
+            if (node1.getVal() == node.getVal()) {
+                if (node1.getWeight() < node.getWeight()) {
                     return;
                 } else {
                     vector.remove(node1);
@@ -76,11 +74,15 @@ public class Main {
                 }
             }
         }
+    }
+
+    private static void insertToGraph(Vector<Node> vector, Node node) {
+        handleSameNodeWithDifferentWeight(vector, node);
         int splitIndex = getSplitIndex(vector);
-        if (list.contains(node.val)) {
+        if (list.contains(node.getVal())) {
             boolean insert = false;
             for (int i = 0; i < splitIndex; i++) {
-                if (node.weight < vector.get(i).weight) {
+                if (node.getWeight() < vector.get(i).getWeight()) {
                     vector.add(i, node);
                     insert = true;
                     break;
@@ -93,7 +95,7 @@ public class Main {
         } else {
             boolean insert = false;
             for (int i = splitIndex; i < vector.size(); i++) {
-                if (node.weight < vector.get(i).weight) {
+                if (node.getWeight() < vector.get(i).getWeight()) {
                     vector.add(i, node);
                     insert = true;
                     break;
